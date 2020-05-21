@@ -12,7 +12,7 @@ const wordsRouter = require('./routes/words');
 // initialize
 const app = express();
 
-// allows cors
+// enable cors
 app.use(cors());
 
 mongoose.connect(process.env.DB_CONNECTION_STRING, {
