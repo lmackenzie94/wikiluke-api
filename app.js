@@ -1,13 +1,19 @@
 require('dotenv').config();
 const express = require('express');
+const cors = require('cors');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
 // import routes
 const wordsRouter = require('./routes/words');
+// const quotesRouter = require('./routes/quotes');
+// const ideasRouter = require('./routes/ideas');
 
 // initialize
 const app = express();
+
+// allows cors
+app.use(cors());
 
 mongoose.connect(process.env.DB_CONNECTION_STRING, {
   useNewUrlParser: true,
