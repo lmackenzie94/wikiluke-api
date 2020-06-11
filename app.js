@@ -36,7 +36,7 @@ app.use('/quotes', quotesRouter);
 app.use('/advice', adviceRouter);
 
 app.get('/', (req, res) => {
-  res.send(`Home | Luke's Better Brain API`);
+  res.send(`Home | wikiluke API`);
 });
 
 const port = process.env.PORT || 6969;
