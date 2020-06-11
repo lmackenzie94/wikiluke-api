@@ -6,8 +6,8 @@ const mongoose = require('mongoose');
 
 // import routes
 const wordsRouter = require('./routes/words');
-// const quotesRouter = require('./routes/quotes');
-// const ideasRouter = require('./routes/ideas');
+const quotesRouter = require('./routes/quotes');
+const adviceRouter = require('./routes/advice');
 
 // initialize
 const app = express();
@@ -32,9 +32,11 @@ app.use(express.json());
 
 // use routes
 app.use('/words', wordsRouter);
+app.use('/quotes', quotesRouter);
+app.use('/advice', adviceRouter);
 
 app.get('/', (req, res) => {
-  res.send('Home');
+  res.send(`Home | Luke's Better Brain API`);
 });
 
 const port = process.env.PORT || 6969;
