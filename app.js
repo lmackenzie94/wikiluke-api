@@ -8,6 +8,7 @@ const mongoose = require('mongoose');
 const wordsRouter = require('./routes/words');
 const quotesRouter = require('./routes/quotes');
 const adviceRouter = require('./routes/advice');
+const learningsRouter = require('./routes/learnings');
 
 // initialize
 const app = express();
@@ -34,6 +35,7 @@ app.use(express.json());
 app.use('/words', wordsRouter);
 app.use('/quotes', quotesRouter);
 app.use('/advice', adviceRouter);
+app.use('/learnings', learningsRouter);
 
 app.get('/', (req, res) => {
   res.send(`Home | wikiluke API`);
