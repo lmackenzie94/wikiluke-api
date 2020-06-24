@@ -5,7 +5,7 @@ const Word = require('../models/word');
 /* Get all words */
 router.get('/', async (_req, res, _next) => {
   try {
-    const words = await Word.find();
+    const words = await Word.find().sort({ name: 'asc' });
     res.json(words);
   } catch (err) {
     res.status(500).json({ message: err.message });
