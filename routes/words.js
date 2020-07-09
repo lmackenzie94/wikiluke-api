@@ -12,6 +12,28 @@ router.get('/', async (_req, res, _next) => {
   }
 });
 
+// Get one RANDOM word (this MUST come before the 'get' route below as 'random' satisfies as the ':id')
+router.get('/random', (req, res) => {
+  try {
+    Word.countDocuments().exec((err, count) => {
+      if (err) {
+        throw new Error(err);
+      }
+      const random = Math.floor(Math.random() * count);
+      Word.findOne()
+        .skip(random)
+        .exec((err, result) => {
+          if (err) {
+            throw new Error(err);
+          }
+          res.json(result);
+        });
+    });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
 // Get one word
 router.get('/:id', getWord, (req, res) => {
   res.json(res.word);
