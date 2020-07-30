@@ -53,7 +53,7 @@ router.patch('/:id', getQuote, async (req, res) => {
 router.delete('/:id', getQuote, async (req, res) => {
   try {
     await res.quote.remove();
-    res.json({ message: `Deleted ${res.quote.name}` });
+    res.json({ message: `Deleted ${res.quote.text}` });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
