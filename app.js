@@ -10,6 +10,8 @@ const quotesRouter = require('./routes/quotes');
 const adviceRouter = require('./routes/advice');
 const learningsRouter = require('./routes/learnings');
 const highlightsRouter = require('./routes/highlights');
+const randomRouter = require('./routes/random');
+
 
 // initialize
 const app = express();
@@ -38,6 +40,8 @@ app.use('/quotes', quotesRouter);
 app.use('/advice', adviceRouter);
 app.use('/learnings', learningsRouter);
 app.use('/highlights', highlightsRouter);
+app.use('/random', randomRouter);
+
 
 app.get('/', (req, res) => {
   res.send(`Home | wikiluke API`);
