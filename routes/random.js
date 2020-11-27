@@ -24,7 +24,7 @@ const randModelName = randModel[1];
           if (err) {
             throw new Error(err);
           }
-          res.json(Object.assign({}, result["_doc"], {name: randModelName}));
+          res.json(Object.assign({}, result["_doc"], {type: randModelName}));
         });
     });
   } catch (err) {
