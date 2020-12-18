@@ -41,17 +41,32 @@ router.get('/:id', getWord, (req, res) => {
 
 // Create one word
 router.post('/', async (req, res) => {
-  const word = new Word({
-    name: req.body.name,
-    definition: req.body.definition,
-  });
 
-  try {
-    const newWord = await word.save();
-    res.status(201).json(newWord);
+   try {
+    const wordExists = await Word.find({"name" : req.body.name});
+
+    if (wordExists.length) {
+      return res.status(409).json({ message: `You've already saved ${req.body.name}` });
+    } 
+
+    const word = new Word({
+      name: req.body.name,
+      definition: req.body.definition,
+    });
+
+    try {
+      const newWord = await word.save();
+      res.status(201).json(newWord);
+    } catch (err) {
+      res.status(400).json({ message: err.message });
+    }
+
   } catch (err) {
-    res.status(400).json({ message: err.message });
+    return res.status(500).json({ message: err.message });
   }
+
+
+  
 });
 
 // Update one word
