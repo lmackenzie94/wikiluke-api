@@ -12,7 +12,6 @@ const learningsRouter = require('./routes/learnings');
 const highlightsRouter = require('./routes/highlights');
 const randomRouter = require('./routes/random');
 
-
 // initialize
 const app = express();
 
@@ -21,10 +20,10 @@ app.use(cors());
 
 mongoose.connect(process.env.DB_CONNECTION_STRING, {
   useNewUrlParser: true,
-  useUnifiedTopology: true,
+  useUnifiedTopology: true
 });
 const db = mongoose.connection;
-db.on('error', (error) => console.error(error));
+db.on('error', error => console.error(error));
 db.once('open', () => console.log('connected to database'));
 
 // The urlencoded method within body-parser tells body-parser to extract data
@@ -42,7 +41,6 @@ app.use('/learnings', learningsRouter);
 app.use('/highlights', highlightsRouter);
 app.use('/random', randomRouter);
 
-
 app.get('/', (req, res) => {
   res.send(`Home | wikiluke API`);
 });
@@ -51,5 +49,5 @@ const port = process.env.PORT || 6969;
 
 // listen
 app.listen(port, () =>
-  console.log(`your dope app is running at http://localhost:${port}`)
+  console.log(`Your dope app is running at http://localhost:${port}`)
 );
