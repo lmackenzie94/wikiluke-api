@@ -33,6 +33,21 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // tell Express it should accept JSON
 app.use(express.json());
 
+// Middleware to check the API key
+const apiKeyMiddleware = (req, res, next) => {
+  const apiKey = req.headers['x-api-key'];
+  if (apiKey && apiKey === process.env.API_KEY) {
+    next(); // API key is correct, proceed to the next middleware/route handler
+  } else {
+    res.status(403).json({ message: 'Forbidden: Invalid API Key' });
+  }
+};
+
+// Use the API key middleware for POST requests
+app.post('*', apiKeyMiddleware);
+app.patch('*', apiKeyMiddleware);
+app.delete('*', apiKeyMiddleware);
+
 // use routes
 app.use('/words', wordsRouter);
 app.use('/quotes', quotesRouter);
