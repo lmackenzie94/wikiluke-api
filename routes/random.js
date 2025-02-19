@@ -12,27 +12,16 @@ const models = [
   [Quote, 'Quote']
 ];
 
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
   const randModel = models[Math.floor(Math.random() * models.length)];
   const randModelObj = randModel[0];
   const randModelName = randModel[1];
 
   try {
-    randModelObj.countDocuments().exec((err, count) => {
-      if (err) {
-        throw new Error(err);
-      }
-      const random = Math.floor(Math.random() * count);
-      randModelObj
-        .findOne()
-        .skip(random)
-        .exec((err, result) => {
-          if (err) {
-            throw new Error(err);
-          }
-          res.json(Object.assign({}, result['_doc'], { type: randModelName }));
-        });
-    });
+    const count = await randModelObj.countDocuments();
+    const random = Math.floor(Math.random() * count);
+    const result = await randModelObj.findOne().skip(random);
+    res.json(Object.assign({}, result['_doc'], { type: randModelName }));
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

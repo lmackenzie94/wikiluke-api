@@ -52,7 +52,7 @@ router.patch('/:id', getLearning, async (req, res) => {
 // Delete one learning
 router.delete('/:id', getLearning, async (req, res) => {
   try {
-    await res.learning.remove();
+    await res.learning.deleteOne();
     res.json({ message: `Successfully unlearned` });
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -61,6 +61,7 @@ router.delete('/:id', getLearning, async (req, res) => {
 
 // Middleware
 async function getLearning(req, res, next) {
+  let learning;
   try {
     learning = await Learning.findById(req.params.id);
     if (learning == null) {

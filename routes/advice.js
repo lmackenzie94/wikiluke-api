@@ -47,7 +47,7 @@ router.patch('/:id', getAdvice, async (req, res) => {
 // Delete one advice
 router.delete('/:id', getAdvice, async (req, res) => {
   try {
-    await res.advice.remove();
+    await res.advice.deleteOne();
     res.json({ message: `Deleted ${res.advice.text}` });
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -56,6 +56,7 @@ router.delete('/:id', getAdvice, async (req, res) => {
 
 // Middleware
 async function getAdvice(req, res, next) {
+  let advice;
   try {
     advice = await Advice.findById(req.params.id);
     if (advice == null) {

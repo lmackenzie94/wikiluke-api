@@ -52,7 +52,7 @@ router.patch('/:id', getQuote, async (req, res) => {
 // Delete one quote
 router.delete('/:id', getQuote, async (req, res) => {
   try {
-    await res.quote.remove();
+    await res.quote.deleteOne();
     res.json({ message: `Deleted ${res.quote.text}` });
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -61,6 +61,7 @@ router.delete('/:id', getQuote, async (req, res) => {
 
 // Middleware
 async function getQuote(req, res, next) {
+  let quote;
   try {
     quote = await Quote.findById(req.params.id);
     if (quote == null) {

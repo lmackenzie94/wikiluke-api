@@ -65,7 +65,7 @@ router.patch('/:id', getHighlight, async (req, res) => {
 // Delete one highlight
 router.delete('/:id', getHighlight, async (req, res) => {
   try {
-    await res.highlight.remove();
+    await res.highlight.deleteOne();
     res.json({ message: `Deleted highlight` });
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -74,6 +74,7 @@ router.delete('/:id', getHighlight, async (req, res) => {
 
 // Middleware
 async function getHighlight(req, res, next) {
+  let highlight;
   try {
     highlight = await Highlight.findById(req.params.id);
     if (highlight == null) {

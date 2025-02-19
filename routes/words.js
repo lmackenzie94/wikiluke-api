@@ -13,22 +13,12 @@ router.get('/', async (_req, res, _next) => {
 });
 
 // Get one RANDOM word (this MUST come before the 'get' route below as 'random' satisfies as the ':id')
-router.get('/random', (req, res) => {
+router.get('/random', async (_, res) => {
   try {
-    Word.countDocuments().exec((err, count) => {
-      if (err) {
-        throw new Error(err);
-      }
-      const random = Math.floor(Math.random() * count);
-      Word.findOne()
-        .skip(random)
-        .exec((err, result) => {
-          if (err) {
-            throw new Error(err);
-          }
-          res.json(result);
-        });
-    });
+    const count = await Word.countDocuments();
+    const random = Math.floor(Math.random() * count);
+    const result = await Word.findOne().skip(random);
+    res.json(result);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -86,7 +76,7 @@ router.patch('/:id', getWord, async (req, res) => {
 // Delete one word
 router.delete('/:id', getWord, async (req, res) => {
   try {
-    await res.word.remove();
+    await res.word.deleteOne();
     res.json({ message: `Deleted ${res.word.name}` });
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -95,6 +85,7 @@ router.delete('/:id', getWord, async (req, res) => {
 
 // Middleware
 async function getWord(req, res, next) {
+  let word;
   try {
     word = await Word.findById(req.params.id);
     if (word == null) {
