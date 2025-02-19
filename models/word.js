@@ -3,11 +3,13 @@ import mongoose from 'mongoose';
 const wordSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: true
+    required: [true, 'Word is required'],
+    trim: true
   },
   definition: {
     type: String,
-    required: true
+    required: [true, 'Definition is required'],
+    trim: true
   }
 });
 

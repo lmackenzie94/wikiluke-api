@@ -53,9 +53,14 @@ app.get('/', (req, res) => {
   res.send(`Home | wikiluke API`);
 });
 
+// 404
+app.use((_, res) => {
+  res.status(404).send('404 Not Found');
+});
+
 const PORT = process.env.PORT || 1234;
 
 // listen
 app.listen(PORT, () =>
-  console.log(`Your dope app is running at http://localhost:${PORT}`)
+  console.log(`Your dope API is running at http://localhost:${PORT}`)
 );
