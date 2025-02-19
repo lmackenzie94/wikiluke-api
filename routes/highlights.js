@@ -1,6 +1,6 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const Highlight = require('../models/highlight');
+import Highlight from '../models/highlight.js';
 
 /* Get all highlights */
 router.get('/', async (_req, res, _next) => {
@@ -22,7 +22,7 @@ router.post('/', async (req, res) => {
   const highlight = new Highlight({
     title: req.body.title,
     url: req.body.url,
-    text: req.body.text,
+    text: req.body.text
   });
 
   try {
@@ -36,7 +36,7 @@ router.post('/', async (req, res) => {
     res.status(400).json({
       message: !missingFields.length
         ? err.message
-        : `Hey man, don't forget to provide the ${missingFields.join(' and ')}`,
+        : `Hey man, don't forget to provide the ${missingFields.join(' and ')}`
     });
   }
 });
@@ -88,4 +88,4 @@ async function getHighlight(req, res, next) {
   next();
 }
 
-module.exports = router;
+export default router;

@@ -1,6 +1,6 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const Quote = require('../models/quote');
+import Quote from '../models/quote.js';
 
 /* Get all quotes */
 router.get('/', async (_req, res, _next) => {
@@ -21,7 +21,7 @@ router.get('/:id', getQuote, (req, res) => {
 router.post('/', async (req, res) => {
   const quote = new Quote({
     text: req.body.text,
-    author: req.body.author,
+    author: req.body.author
   });
 
   try {
@@ -75,4 +75,4 @@ async function getQuote(req, res, next) {
   next();
 }
 
-module.exports = router;
+export default router;

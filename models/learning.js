@@ -1,14 +1,14 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const learningSchema = new mongoose.Schema({
   text: {
     type: String,
-    required: true,
+    required: true
   },
   category: {
     type: String,
-    required: true,
-  },
+    required: true
+  }
 });
 
-module.exports = mongoose.model('Learning', learningSchema);
+export default mongoose.model('Learning', learningSchema);

@@ -1,6 +1,6 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const Learning = require('../models/learning');
+import Learning from '../models/learning.js';
 
 /* Get all learnings */
 router.get('/', async (_req, res, _next) => {
@@ -21,7 +21,7 @@ router.get('/:id', getLearning, (req, res) => {
 router.post('/', async (req, res) => {
   const learning = new Learning({
     text: req.body.text,
-    category: req.body.category,
+    category: req.body.category
   });
 
   try {
@@ -75,4 +75,4 @@ async function getLearning(req, res, next) {
   next();
 }
 
-module.exports = router;
+export default router;

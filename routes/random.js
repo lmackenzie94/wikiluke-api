@@ -1,16 +1,21 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const Word = require('../models/word');
-const Advice = require('../models/advice');
-const Learning = require('../models/learning');
-const Quote = require('../models/quote');
+import Word from '../models/word.js';
+import Advice from '../models/advice.js';
+import Learning from '../models/learning.js';
+import Quote from '../models/quote.js';
 
-const models = [[Word, 'Word'], [Advice, 'Advice'], [Learning, 'Learning'], [Quote, 'Quote']];
+const models = [
+  [Word, 'Word'],
+  [Advice, 'Advice'],
+  [Learning, 'Learning'],
+  [Quote, 'Quote']
+];
 
 router.get('/', (req, res) => {
-const randModel = models[Math.floor(Math.random() * models.length)];
-const randModelObj = randModel[0];
-const randModelName = randModel[1];
+  const randModel = models[Math.floor(Math.random() * models.length)];
+  const randModelObj = randModel[0];
+  const randModelName = randModel[1];
 
   try {
     randModelObj.countDocuments().exec((err, count) => {
@@ -18,13 +23,14 @@ const randModelName = randModel[1];
         throw new Error(err);
       }
       const random = Math.floor(Math.random() * count);
-      randModelObj.findOne()
+      randModelObj
+        .findOne()
         .skip(random)
         .exec((err, result) => {
           if (err) {
             throw new Error(err);
           }
-          res.json(Object.assign({}, result["_doc"], {type: randModelName}));
+          res.json(Object.assign({}, result['_doc'], { type: randModelName }));
         });
     });
   } catch (err) {
@@ -32,4 +38,4 @@ const randModelName = randModel[1];
   }
 });
 
-module.exports = router;
+export default router;

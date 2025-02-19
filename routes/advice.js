@@ -1,6 +1,6 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const Advice = require('../models/advice');
+import Advice from '../models/advice.js';
 
 /* Get all advice */
 router.get('/', async (_req, res, _next) => {
@@ -20,7 +20,7 @@ router.get('/:id', getAdvice, (req, res) => {
 // Create one advice
 router.post('/', async (req, res) => {
   const advice = new Advice({
-    text: req.body.text,
+    text: req.body.text
   });
 
   try {
@@ -70,4 +70,4 @@ async function getAdvice(req, res, next) {
   next();
 }
 
-module.exports = router;
+export default router;

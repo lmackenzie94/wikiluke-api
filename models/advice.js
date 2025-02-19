@@ -1,10 +1,10 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const adviceSchema = new mongoose.Schema({
   text: {
     type: String,
-    required: true,
-  },
+    required: true
+  }
 });
 
-module.exports = mongoose.model('Advice', adviceSchema);
+export default mongoose.model('Advice', adviceSchema);

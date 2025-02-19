@@ -1,16 +1,14 @@
-require('dotenv').config();
-const express = require('express');
-const cors = require('cors');
-const bodyParser = require('body-parser');
-const mongoose = require('mongoose');
+import express from 'express';
+import cors from 'cors';
+import mongoose from 'mongoose';
 
 // import routes
-const wordsRouter = require('./routes/words');
-const quotesRouter = require('./routes/quotes');
-const adviceRouter = require('./routes/advice');
-const learningsRouter = require('./routes/learnings');
-const highlightsRouter = require('./routes/highlights');
-const randomRouter = require('./routes/random');
+import wordsRouter from './routes/words.js';
+import quotesRouter from './routes/quotes.js';
+import adviceRouter from './routes/advice.js';
+import learningsRouter from './routes/learnings.js';
+import highlightsRouter from './routes/highlights.js';
+import randomRouter from './routes/random.js';
 
 // initialize
 const app = express();
@@ -18,17 +16,12 @@ const app = express();
 // enable cors
 app.use(cors());
 
-mongoose.connect(process.env.DB_CONNECTION_STRING, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-});
+mongoose.connect(process.env.DB_CONNECTION_STRING);
 const db = mongoose.connection;
-db.on('error', error => console.error(error));
 db.once('open', () => console.log('connected to database'));
+db.on('error', error => console.error(error));
 
-// The urlencoded method within body-parser tells body-parser to extract data
-// from the <form> element and add them to the body property in the request object.
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true }));
 
 // tell Express it should accept JSON
 app.use(express.json());
@@ -60,9 +53,9 @@ app.get('/', (req, res) => {
   res.send(`Home | wikiluke API`);
 });
 
-const port = process.env.PORT || 6969;
+const PORT = process.env.PORT || 1234;
 
 // listen
-app.listen(port, () =>
-  console.log(`Your dope app is running at http://localhost:${port}`)
+app.listen(PORT, () =>
+  console.log(`Your dope app is running at http://localhost:${PORT}`)
 );

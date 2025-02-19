@@ -1,6 +1,6 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const Word = require('../models/word');
+import Word from '../models/word.js';
 
 /* Get all words */
 router.get('/', async (_req, res, _next) => {
@@ -41,17 +41,18 @@ router.get('/:id', getWord, (req, res) => {
 
 // Create one word
 router.post('/', async (req, res) => {
-
-   try {
-    const wordExists = await Word.find({"name" : req.body.name});
+  try {
+    const wordExists = await Word.find({ name: req.body.name });
 
     if (wordExists.length) {
-      return res.status(409).json({ message: `You've already saved ${req.body.name}` });
-    } 
+      return res
+        .status(409)
+        .json({ message: `You've already saved ${req.body.name}` });
+    }
 
     const word = new Word({
       name: req.body.name,
-      definition: req.body.definition,
+      definition: req.body.definition
     });
 
     try {
@@ -60,13 +61,9 @@ router.post('/', async (req, res) => {
     } catch (err) {
       res.status(400).json({ message: err.message });
     }
-
   } catch (err) {
     return res.status(500).json({ message: err.message });
   }
-
-
-  
 });
 
 // Update one word
@@ -112,4 +109,4 @@ async function getWord(req, res, next) {
   next();
 }
 
-module.exports = router;
+export default router;

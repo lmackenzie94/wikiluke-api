@@ -1,18 +1,18 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const highlightSchema = new mongoose.Schema({
   title: {
     type: String,
-    required: true,
+    required: true
   },
   url: {
     type: String,
-    required: true,
+    required: true
   },
   text: {
     type: String,
-    required: true,
-  },
+    required: true
+  }
 });
 
-module.exports = mongoose.model('Highlight', highlightSchema);
+export default mongoose.model('Highlight', highlightSchema);

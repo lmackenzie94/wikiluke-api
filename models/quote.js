@@ -1,13 +1,13 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const quoteSchema = new mongoose.Schema({
   text: {
     type: String,
-    required: true,
+    required: true
   },
   author: {
-    type: String,
-  },
+    type: String
+  }
 });
 
-module.exports = mongoose.model('Quote', quoteSchema);
+export default mongoose.model('Quote', quoteSchema);
