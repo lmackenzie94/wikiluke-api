@@ -4,12 +4,14 @@ import Word from '../models/word.js';
 import Advice from '../models/advice.js';
 import Learning from '../models/learning.js';
 import Quote from '../models/quote.js';
+import Highlight from '../models/highlight.js';
 
 const models = [
   [Word, 'Word'],
   [Advice, 'Advice'],
   [Learning, 'Learning'],
-  [Quote, 'Quote']
+  [Quote, 'Quote'],
+  [Highlight, 'Highlight']
 ];
 
 /**
