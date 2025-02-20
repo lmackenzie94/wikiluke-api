@@ -12,6 +12,8 @@ import Word from '../models/word.js';
  *     responses:
  *       200:
  *         description: List of words
+ *       500:
+ *         description: Server error
  */
 router.get('/', async (_req, res, _next) => {
   try {
@@ -33,6 +35,8 @@ router.get('/', async (_req, res, _next) => {
  *     responses:
  *       200:
  *         description: A random word
+ *       500:
+ *         description: Server error
  */
 router.get('/random', async (_, res) => {
   try {
@@ -68,9 +72,32 @@ router.get('/:id', getWord, (req, res) => {
  *     summary: Create a word
  *     tags:
  *       - Words
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - name
+ *               - definition
+ *             properties:
+ *               name:
+ *                 type: string
+ *               definition:
+ *                 type: string
+ *     security:
+ *       - ApiKeyAuth: []
  *     responses:
- *       200:
+ *       201:
  *         description: A word
+ *       403:
+ *         description: Forbidden
+ *       409:
+ *         description: Word already exists
+ *       500:
+ *         description: Server error
+ 
  */
 router.post('/', async (req, res) => {
   try {
@@ -105,9 +132,15 @@ router.post('/', async (req, res) => {
  *     summary: Update a word by ID
  *     tags:
  *       - Words
+ *     security:
+ *       - ApiKeyAuth: []
  *     responses:
  *       200:
  *         description: A word
+ *       400:
+ *         description: Bad request
+ *       403:
+ *         description: Forbidden
  */
 router.patch('/:id', getWord, async (req, res) => {
   if (req.body.name != null) {
@@ -132,9 +165,15 @@ router.patch('/:id', getWord, async (req, res) => {
  *     summary: Delete a word by ID
  *     tags:
  *       - Words
+ *     security:
+ *       - ApiKeyAuth: []
  *     responses:
  *       200:
  *         description: A word
+ *       403:
+ *         description: Forbidden
+ *       500:
+ *         description: Server error
  */
 router.delete('/:id', getWord, async (req, res) => {
   try {
@@ -149,6 +188,7 @@ router.delete('/:id', getWord, async (req, res) => {
 async function getWord(req, res, next) {
   let word;
   try {
+    console.log('Deleting word', req.params.id);
     word = await Word.findById(req.params.id);
     if (word == null) {
       return res.status(404).json({ message: 'Cant find word' });

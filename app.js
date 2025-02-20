@@ -13,6 +13,9 @@ import randomRouter from './routes/random.js';
 // swagger
 import { setupSwagger } from './swagger.js';
 
+// auth
+import { apiKeyMiddleware } from './auth.js';
+
 // initialize
 const app = express();
 
@@ -32,16 +35,6 @@ app.use(express.json());
 // swagger
 setupSwagger(app);
 
-// Middleware to check the API key
-const apiKeyMiddleware = (req, res, next) => {
-  const apiKey = req.headers['x-api-key'];
-  if (apiKey && apiKey === process.env.API_KEY) {
-    next(); // API key is correct, proceed to the next middleware/route handler
-  } else {
-    res.status(403).json({ message: 'Forbidden: Invalid API Key' });
-  }
-};
-
 // Use the API key middleware for POST requests
 app.post('*', apiKeyMiddleware);
 app.patch('*', apiKeyMiddleware);
@@ -56,7 +49,7 @@ app.use('/highlights', highlightsRouter);
 app.use('/random', randomRouter);
 
 // Home
-app.get('/', (req, res) => {
+app.get('/', (_, res) => {
   res.send(`Home | wikiluke API`);
 });
 

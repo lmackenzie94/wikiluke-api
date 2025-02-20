@@ -9,6 +9,16 @@ const options = {
       version: '1.0.0',
       description: 'API for managing words, quotes, advice, and learnings'
     },
+    components: {
+      securitySchemes: {
+        BearerAuth: {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'API Key',
+          description: 'Enter your API key as: Bearer your-api-key'
+        }
+      }
+    },
     tags: [
       { name: 'Words' },
       { name: 'Quotes' },
