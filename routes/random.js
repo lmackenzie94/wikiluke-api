@@ -24,18 +24,32 @@ const models = [
  *         description: A random Word, Advice, Learning, or Quote
  */
 router.get('/', async (req, res) => {
-  const randModel = models[Math.floor(Math.random() * models.length)];
-  const randModelObj = randModel[0];
-  const randModelName = randModel[1];
-
   try {
-    const count = await randModelObj.countDocuments();
-    const random = Math.floor(Math.random() * count);
-    const result = await randModelObj.findOne().skip(random);
-    res.json(Object.assign({}, result['_doc'], { type: randModelName }));
+    const [result, randModelName] = await getRandomModel();
+    res.json(Object.assign({}, result, { type: randModelName }));
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 });
+
+async function getRandomModel() {
+  // Shuffle models array to avoid potential bias
+  const shuffledModels = [...models].sort(() => Math.random() - 0.5);
+
+  // Try each model until we find one with documents
+  for (const [Model, modelName] of shuffledModels) {
+    const result = await Model.aggregate([
+      { $match: {} }, // Ensure we only get valid documents
+      { $sample: { size: 1 } } // Get one random document
+    ]).exec(); // Execute the aggregation
+
+    if (result.length > 0) {
+      return [result[0], modelName];
+    }
+  }
+
+  // If no documents found in any collection
+  throw new Error('No documents found in any collection');
+}
 
 export default router;
