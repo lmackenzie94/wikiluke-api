@@ -2,7 +2,17 @@ import express from 'express';
 const router = express.Router();
 import Learning from '../models/learning.js';
 
-/* Get all learnings */
+/**
+ * @swagger
+ * /learnings:
+ *   get:
+ *     summary: Get all learnings
+ *     tags:
+ *       - Learnings
+ *     responses:
+ *       200:
+ *         description: An array of learnings
+ */
 router.get('/', async (_req, res, _next) => {
   try {
     const learnings = await Learning.find();
@@ -12,12 +22,32 @@ router.get('/', async (_req, res, _next) => {
   }
 });
 
-// Get one learning
+/**
+ * @swagger
+ * /learnings/{id}:
+ *   get:
+ *     summary: Get a learning by ID
+ *     tags:
+ *       - Learnings
+ *     responses:
+ *       200:
+ *         description: A learning
+ */
 router.get('/:id', getLearning, (req, res) => {
   res.json(res.learning);
 });
 
-// Create one learning
+/**
+ * @swagger
+ * /learnings:
+ *   post:
+ *     summary: Create a learning
+ *     tags:
+ *       - Learnings
+ *     responses:
+ *       200:
+ *         description: A learning
+ */
 router.post('/', async (req, res) => {
   const learning = new Learning({
     text: req.body.text,
@@ -32,7 +62,17 @@ router.post('/', async (req, res) => {
   }
 });
 
-// Update one learning
+/**
+ * @swagger
+ * /learnings/{id}:
+ *   patch:
+ *     summary: Update a learning by ID
+ *     tags:
+ *       - Learnings
+ *     responses:
+ *       200:
+ *         description: A learning
+ */
 router.patch('/:id', getLearning, async (req, res) => {
   if (req.body.text != null) {
     res.learning.text = req.body.text;
@@ -49,7 +89,17 @@ router.patch('/:id', getLearning, async (req, res) => {
   }
 });
 
-// Delete one learning
+/**
+ * @swagger
+ * /learnings/{id}:
+ *   delete:
+ *     summary: Delete a learning by ID
+ *     tags:
+ *       - Learnings
+ *     responses:
+ *       200:
+ *         description: A learning
+ */
 router.delete('/:id', getLearning, async (req, res) => {
   try {
     await res.learning.deleteOne();

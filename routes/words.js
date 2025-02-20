@@ -2,7 +2,17 @@ import express from 'express';
 const router = express.Router();
 import Word from '../models/word.js';
 
-/* Get all words */
+/**
+ * @swagger
+ * /words:
+ *   get:
+ *     summary: Get all words
+ *     tags:
+ *       - Words
+ *     responses:
+ *       200:
+ *         description: List of words
+ */
 router.get('/', async (_req, res, _next) => {
   try {
     const words = await Word.find().sort({ name: 'asc' });
@@ -12,7 +22,18 @@ router.get('/', async (_req, res, _next) => {
   }
 });
 
-// Get one RANDOM word (this MUST come before the 'get' route below as 'random' satisfies as the ':id')
+// this MUST come before the 'get' route below as 'random' satisfies as the ':id'
+/**
+ * @swagger
+ * /words/random:
+ *   get:
+ *     summary: Get a random word
+ *     tags:
+ *       - Words
+ *     responses:
+ *       200:
+ *         description: A random word
+ */
 router.get('/random', async (_, res) => {
   try {
     const count = await Word.countDocuments();
@@ -24,12 +45,33 @@ router.get('/random', async (_, res) => {
   }
 });
 
-// Get one word
+/**
+ * @swagger
+ * /words/{id}:
+ *   get:
+ *     summary: Get a word by ID
+ *     tags:
+ *       - Words
+ *     responses:
+ *       200:
+ *         description: A word
+ */
 router.get('/:id', getWord, (req, res) => {
   res.json(res.word);
 });
 
 // Create one word
+/**
+ * @swagger
+ * /words:
+ *   post:
+ *     summary: Create a word
+ *     tags:
+ *       - Words
+ *     responses:
+ *       200:
+ *         description: A word
+ */
 router.post('/', async (req, res) => {
   try {
     const wordExists = await Word.find({ name: req.body.name });
@@ -56,7 +98,17 @@ router.post('/', async (req, res) => {
   }
 });
 
-// Update one word
+/**
+ * @swagger
+ * /words/{id}:
+ *   patch:
+ *     summary: Update a word by ID
+ *     tags:
+ *       - Words
+ *     responses:
+ *       200:
+ *         description: A word
+ */
 router.patch('/:id', getWord, async (req, res) => {
   if (req.body.name != null) {
     res.word.name = req.body.name;
@@ -73,7 +125,17 @@ router.patch('/:id', getWord, async (req, res) => {
   }
 });
 
-// Delete one word
+/**
+ * @swagger
+ * /words/{id}:
+ *   delete:
+ *     summary: Delete a word by ID
+ *     tags:
+ *       - Words
+ *     responses:
+ *       200:
+ *         description: A word
+ */
 router.delete('/:id', getWord, async (req, res) => {
   try {
     await res.word.deleteOne();

@@ -2,7 +2,17 @@ import express from 'express';
 const router = express.Router();
 import Highlight from '../models/highlight.js';
 
-/* Get all highlights */
+/**
+ * @swagger
+ * /highlights:
+ *   get:
+ *     summary: Get all highlights
+ *     tags:
+ *       - Highlights
+ *     responses:
+ *       200:
+ *         description: An array of highlights
+ */
 router.get('/', async (_req, res, _next) => {
   try {
     const highlights = await Highlight.find();
@@ -12,12 +22,32 @@ router.get('/', async (_req, res, _next) => {
   }
 });
 
-// Get one highlight
+/**
+ * @swagger
+ * /highlights/{id}:
+ *   get:
+ *     summary: Get a highlight by ID
+ *     tags:
+ *       - Highlights
+ *     responses:
+ *       200:
+ *         description: A highlight
+ */
 router.get('/:id', getHighlight, (req, res) => {
   res.json(res.highlight);
 });
 
-// Create one highlight
+/**
+ * @swagger
+ * /highlights:
+ *   post:
+ *     summary: Create a highlight
+ *     tags:
+ *       - Highlights
+ *     responses:
+ *       200:
+ *         description: A highlight
+ */
 router.post('/', async (req, res) => {
   const highlight = new Highlight({
     title: req.body.title,
@@ -41,7 +71,17 @@ router.post('/', async (req, res) => {
   }
 });
 
-// Update one highlight
+/**
+ * @swagger
+ * /highlights/{id}:
+ *   patch:
+ *     summary: Update a highlight by ID
+ *     tags:
+ *       - Highlights
+ *     responses:
+ *       200:
+ *         description: A highlight
+ */
 router.patch('/:id', getHighlight, async (req, res) => {
   if (req.body.title != null) {
     res.highlight.title = req.body.title;
@@ -62,7 +102,17 @@ router.patch('/:id', getHighlight, async (req, res) => {
   }
 });
 
-// Delete one highlight
+/**
+ * @swagger
+ * /highlights/{id}:
+ *   delete:
+ *     summary: Delete a highlight by ID
+ *     tags:
+ *       - Highlights
+ *     responses:
+ *       200:
+ *         description: A highlight
+ */
 router.delete('/:id', getHighlight, async (req, res) => {
   try {
     await res.highlight.deleteOne();

@@ -12,6 +12,17 @@ const models = [
   [Quote, 'Quote']
 ];
 
+/**
+ * @swagger
+ * /random:
+ *   get:
+ *     summary: Get a random Word, Advice, Learning, or Quote
+ *     tags:
+ *       - Random
+ *     responses:
+ *       200:
+ *         description: A random Word, Advice, Learning, or Quote
+ */
 router.get('/', async (req, res) => {
   const randModel = models[Math.floor(Math.random() * models.length)];
   const randModelObj = randModel[0];

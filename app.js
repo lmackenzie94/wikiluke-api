@@ -10,6 +10,9 @@ import learningsRouter from './routes/learnings.js';
 import highlightsRouter from './routes/highlights.js';
 import randomRouter from './routes/random.js';
 
+// swagger
+import { setupSwagger } from './swagger.js';
+
 // initialize
 const app = express();
 
@@ -25,6 +28,9 @@ app.use(express.urlencoded({ extended: true }));
 
 // tell Express it should accept JSON
 app.use(express.json());
+
+// swagger
+setupSwagger(app);
 
 // Middleware to check the API key
 const apiKeyMiddleware = (req, res, next) => {
@@ -49,6 +55,7 @@ app.use('/learnings', learningsRouter);
 app.use('/highlights', highlightsRouter);
 app.use('/random', randomRouter);
 
+// Home
 app.get('/', (req, res) => {
   res.send(`Home | wikiluke API`);
 });
