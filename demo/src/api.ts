@@ -1,17 +1,16 @@
-interface Word {
-  _id: string;
+interface MongoDocument {
+  _id: string; // MongoDB's automatic unique identifier
+}
+
+export interface Word extends MongoDocument {
   name: string;
   definition: string;
 }
 
-interface Advice {
-  _id: string;
-  text: string;
-}
+const BASE_URL = import.meta.env.VITE_API_URL;
+const token = import.meta.env.VITE_API_TOKEN;
 
-const BASE_URL = 'http://localhost:1234';
-
-const fetchWords = async (): Promise<Word[]> => {
+export const fetchWords = async (): Promise<Word[]> => {
   const response = await fetch(`${BASE_URL}/words`);
   if (!response.ok) {
     throw new Error('Failed to fetch words');
@@ -19,13 +18,37 @@ const fetchWords = async (): Promise<Word[]> => {
   return response.json();
 };
 
-const fetchAdvice = async (): Promise<Advice[]> => {
-  const response = await fetch(`${BASE_URL}/advice`);
+type AddWordRequest = Omit<Word, '_id'>;
+export const addWord = async (word: AddWordRequest): Promise<Word> => {
+  if (!token) {
+    throw new Error('API token is not set');
+  }
+  const response = await fetch(`${BASE_URL}/words`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`
+    },
+    body: JSON.stringify(word)
+  });
+
   if (!response.ok) {
-    throw new Error('Failed to fetch advice');
+    throw new Error('Failed to add word');
   }
   return response.json();
 };
 
-export { fetchWords, fetchAdvice };
-export type { Word, Advice };
+export const deleteWord = async (wordId: string): Promise<void> => {
+  if (!token) {
+    throw new Error('API token is not set');
+  }
+  const response = await fetch(`${BASE_URL}/words/${wordId}`, {
+    method: 'DELETE',
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  });
+  if (!response.ok) {
+    throw new Error('Failed to delete word');
+  }
+};
