@@ -1,44 +1,33 @@
 import { useQuery } from '@tanstack/react-query';
 import './App.css';
-
-// Types for our API responses
-interface Word {
-  _id: string;
-  name: string;
-  definition: string;
-}
-
-interface Advice {
-  _id: string;
-  text: string;
-}
+import { fetchAdvice, fetchWords } from './api';
 
 function App() {
-  const { data: words, isLoading: wordsLoading } = useQuery({
+  const {
+    data: words = [],
+    isLoading: wordsLoading,
+    isError: wordsHasError,
+    error: wordsError,
+    isFetching: wordsFetching,
+    status: wordsStatus,
+    dataUpdatedAt: wordsDataUpdatedAt
+  } = useQuery({
     queryKey: ['words'],
-    queryFn: async () => {
-      const response = await fetch('http://localhost:1234/words');
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      return response.json() as Promise<Word[]>;
-    }
+    queryFn: fetchWords
   });
 
-  const { data: advice, isLoading: adviceLoading } = useQuery({
+  const {
+    data: advice = [],
+    isLoading: adviceLoading,
+    isError: adviceHasError,
+    error: adviceError,
+    isFetching: adviceFetching,
+    status: adviceStatus,
+    dataUpdatedAt: adviceDataUpdatedAt
+  } = useQuery({
     queryKey: ['advice'],
-    queryFn: async () => {
-      const response = await fetch('http://localhost:1234/advice');
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      return response.json() as Promise<Advice[]>;
-    }
+    queryFn: fetchAdvice
   });
-
-  if (wordsLoading || adviceLoading) {
-    return <div>Loading...</div>;
-  }
 
   return (
     <div className="app">
@@ -46,25 +35,49 @@ function App() {
 
       <section>
         <h2>Words Collection</h2>
-        <div className="words">
-          {words?.map(word => (
-            <div key={word._id} className="word">
-              <h3>{word.name}</h3>
-              <p>{word.definition}</p>
-            </div>
-          ))}
-        </div>
+        {wordsLoading && <div>Loading words...</div>}
+        {wordsFetching && <div>Fetching words...</div>}
+        {wordsHasError && <div>Error: {wordsError?.message}</div>}
+        {wordsStatus && <p>Status: {wordsStatus}</p>}
+        {!!wordsDataUpdatedAt && (
+          <p>
+            Last updated at: {new Date(wordsDataUpdatedAt).toLocaleString()}
+          </p>
+        )}
+
+        {words?.length > 0 && (
+          <div className="words">
+            {words?.map(word => (
+              <div key={word._id} className="word">
+                <h3>{word.name}</h3>
+                <p>{word.definition}</p>
+              </div>
+            ))}
+          </div>
+        )}
       </section>
 
       <section>
         <h2>Advice Collection</h2>
-        <div className="advice">
-          {advice?.map(item => (
-            <div key={item._id} className="advice-item">
-              <p>{item.text}</p>
-            </div>
-          ))}
-        </div>
+        {adviceLoading && <div>Loading advice...</div>}
+        {adviceFetching && <div>Fetching advice...</div>}
+        {adviceHasError && <div>Error: {adviceError?.message}</div>}
+        {adviceStatus && <p>Status: {adviceStatus}</p>}
+        {!!adviceDataUpdatedAt && (
+          <p>
+            Last updated at: {new Date(adviceDataUpdatedAt).toLocaleString()}
+          </p>
+        )}
+
+        {advice?.length > 0 && (
+          <div className="advice">
+            {advice?.map(item => (
+              <div key={item._id} className="advice-item">
+                <p>{item.text}</p>
+              </div>
+            ))}
+          </div>
+        )}
       </section>
     </div>
   );
